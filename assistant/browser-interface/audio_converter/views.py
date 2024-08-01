@@ -4,6 +4,7 @@ from .models import AudioRecording
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 import os
+from django.conf import settings
 
 
 def intro(request):
@@ -18,7 +19,7 @@ def upload_audio(request):
         file_name = f"audio_{current_datetime}.wav"
 
         # upload_path = os.path.join('media', 'audio', audio_file.name)
-        file_path = os.path.join('media', file_name)
+        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
         with open(file_path, 'wb') as file:
             for chunk in audio_file.chunks():
                 file.write(chunk)
