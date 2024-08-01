@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Recorder</title>
+    <link rel="stylesheet" href="{% static 'audio_converter/intro.css' %}">
+    
+</head>
+
+<h1>Web assistant app</h1>
+
+<button id="startRecord">Start Recording</button>
+<button id="stopRecord" disabled>Stop Recording</button>
+
+<p id="serverFeedback"></p>
+
+<script src="{% static 'audio_converter/intro.js' %}"></script>
+</body>
+</html>
