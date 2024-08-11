@@ -4,12 +4,14 @@ import os
 
 # Initialize the Flask app
 app = Flask(__name__)
+app.config['TESTING'] = True
 
 # Load the Whisper model once when the server starts
 model = whisper.load_model("base")
+#model = whisper.load_model("tiny.en")
 
 # Define the base directory for audio files
-BASE_DIR = "/shared/voice/"
+BASE_DIR = "/shared/input_audio/"
 
 # Define the endpoint
 @app.route('/transcribe/<filename>', methods=['GET'])
@@ -40,5 +42,7 @@ import whisper
 model = whisper.load_model("base")
 result = model.transcribe("audio.mp3")
 print(result["text"])
+
+wget 127.0.0.1:5000/transcribe/audio_20240811_122541.wav
 
 '''

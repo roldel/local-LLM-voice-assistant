@@ -6,6 +6,8 @@ from datetime import datetime
 import os
 from django.conf import settings
 
+import requests
+
 
 def intro(request):
     return render(request,'audio_converter/intro.html')
@@ -25,10 +27,20 @@ def upload_audio(request):
                 file.write(chunk)
 
         server_feedback_message = 'Audio file uploaded successfully ! File save as : '+file_name
-        return JsonResponse({'message': server_feedback_message })
+
+        stt_url = f"http://speech-to-text:5000/transcribe/{file_name}"
+        response = requests.get(stt_url)
+
+        if response.status_code == 200:
+            stt_response = response.json()
+            transcription_text = stt_response.get('text', '')
+            server_feedback_message += f" Transcription: {transcription_text}"
+        else:
+            server_feedback_message += " Error: Failed to retrieve data from the Flask app."
+
+        return JsonResponse({'message': server_feedback_message})
     else:
         return JsonResponse({'message': 'No audio file found'}, status=400)
-
 
 
 '''

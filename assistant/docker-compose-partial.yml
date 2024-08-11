@@ -19,8 +19,16 @@ services:
     command: sh -c "python /app/manage.py runserver 0.0.0.0:8000"
 
 
+  speech-to-text:
 
-
+    build:
+      context: ./speech-to-text
+      dockerfile: Dockerfile
+    volumes:
+      - shared_volume:/shared
+    depends_on:
+      - browser-interface
+    command: sh -c "python /app/stt_server.py"
 
 
 
