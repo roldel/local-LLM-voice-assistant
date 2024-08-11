@@ -19,7 +19,7 @@ def upload_audio(request):
         file_name = f"audio_{current_datetime}.wav"
 
         # upload_path = os.path.join('media', 'audio', audio_file.name)
-        file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+        file_path = os.path.join(settings.MEDIA_ROOT,'input_audio', file_name)
         with open(file_path, 'wb') as file:
             for chunk in audio_file.chunks():
                 file.write(chunk)
