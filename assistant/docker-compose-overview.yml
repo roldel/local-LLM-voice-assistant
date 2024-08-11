@@ -16,9 +16,9 @@ services:
       timeout: 30s
       retries: 3
       start_period: 5s
-    command: sh -c "python /app/manage.py runserver 0.0.0.0:8000"
-
-
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    
+  
   speech-to-text:
 
     build:
@@ -27,11 +27,28 @@ services:
     volumes:
       - shared_volume:/shared
     depends_on:
-      - browser-interface
-    command: sh -c "python /app/stt_server.py"
+      - web-interface
+    command: sh -c "python stt_server.py"
 
 
+  locall-llm:
 
+    build:
+      context: ./local-llm
+      dockerfile: Dockerfile
+    #ports:
+      #- "8000:8000"
+
+
+  text-to-speech:
+
+    build:
+      context: ./text-to-speech
+      dockerfile: Dockerfile
+    volumes:
+      - shared_volume:/shared
+
+  
 volumes:
   shared_volume:  
 

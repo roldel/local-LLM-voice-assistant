@@ -12,13 +12,13 @@ services:
       - shared_volume:/shared
     healthcheck:
       test: ["CMD-SHELL", "wget --spider -q http://0.0.0.0:8000/ || exit 1"]
-      interval: 60s
-      timeout: 30s
+      interval: 20s
+      timeout: 10s
       retries: 3
       start_period: 5s
-    command: sh -c "python manage.py runserver 0.0.0.0:8000"
-    
-  
+    command: sh -c "python /app/manage.py runserver 0.0.0.0:8000"
+
+
   speech-to-text:
 
     build:
@@ -27,28 +27,17 @@ services:
     volumes:
       - shared_volume:/shared
     depends_on:
-      - web-interface
-    command: sh -c "python stt_server.py"
+      - browser-interface
+    command: sh -c "python /app/stt_server.py"
+
+    healthcheck:
+      test: ["CMD", "python", "/app/healthcheck.py"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
 
-  locall-llm:
-
-    build:
-      context: ./local-llm
-      dockerfile: Dockerfile
-    #ports:
-      #- "8000:8000"
-
-
-  text-to-speech:
-
-    build:
-      context: ./text-to-speech
-      dockerfile: Dockerfile
-    volumes:
-      - shared_volume:/shared
-
-  
 volumes:
   shared_volume:  
 

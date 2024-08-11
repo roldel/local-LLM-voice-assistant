@@ -7,8 +7,7 @@ app = Flask(__name__)
 app.config['TESTING'] = True
 
 # Load the Whisper model once when the server starts
-model = whisper.load_model("base")
-#model = whisper.load_model("tiny.en")
+model = whisper.load_model("base.en")
 
 # Define the base directory for audio files
 BASE_DIR = "/shared/input_audio/"
@@ -29,20 +28,14 @@ def transcribe_audio(filename):
         # Handle errors (e.g., file not found, transcription error)
         return jsonify({"error": str(e)}), 400
 
+
+# Define a separate health check endpoint
+@app.route('/healthcheck', methods=['GET'])
+def healthcheck():
+    return jsonify({"status": "healthy"}), 200
+
+
+
 # Run the Flask app
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-
-
-
-
-'''
-import whisper
-
-model = whisper.load_model("base")
-result = model.transcribe("audio.mp3")
-print(result["text"])
-
-wget 127.0.0.1:5000/transcribe/audio_20240811_122541.wav
-
-'''
