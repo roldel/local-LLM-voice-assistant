@@ -3,13 +3,13 @@
 
 ## STEP 1 PAROT
 
-1. Evaluate speech to text models options and set up selected one
+1. DONE Evaluate speech to text models options and set up selected one
 
-2. Create web interface to collect user audio sample and push it within request to server
+2. DONE Create web interface to collect user audio sample and push it within request to server
 
-3. Django server side request with file management processing, saves the file temporarily
+3. DONE Django server side request with file management processing, saves the file temporarily
 
-4. Process user audio sample into STT model, print out audio sample to text
+4. DONE Process user audio sample into STT model, print out audio sample to text
 
 5. Render the input audio text as audio, text to speech
 
