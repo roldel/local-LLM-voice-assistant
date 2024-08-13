@@ -5,7 +5,6 @@ services:
   
     build:
       context: ./browser-interface
-      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     volumes:
@@ -23,7 +22,6 @@ services:
 
     build:
       context: ./speech-to-text
-      dockerfile: Dockerfile
     volumes:
       - shared_volume:/shared
     depends_on:
@@ -35,6 +33,23 @@ services:
       timeout: 10s
       retries: 5
       start_period: 10s
+
+
+  local-llm:
+    build:
+      context: ./local-llm
+    depends_on:
+      - speech-to-text
+    # command: 
+
+
+#  text-to-speech:
+#
+#    build:
+#      context: ./text-to-speech
+#    volumes:
+#      - shared_volume:/shared
+
 
 
 volumes:

@@ -7,6 +7,9 @@ import os
 from django.conf import settings
 
 import requests
+import ollama
+
+from ollama import Client
 
 
 def intro(request):
@@ -35,6 +38,15 @@ def upload_audio(request):
             stt_response = response.json()
             transcription_text = stt_response.get('text', '')
             server_feedback_message += f" Transcription: {transcription_text}"
+
+
+
+            client = Client(host='http://local-llm:11434')
+            llm_response = client.chat(model='gemma:2b', messages=[{'role': 'user','content': transcription_text}])
+            #llm_response = ollama.generate(model='gemma:2b', prompt='Why is the sky blue?')
+            print(llm_response['message']['content'])
+
+
         else:
             server_feedback_message += " Error: Failed to retrieve data from the Flask app."
 
