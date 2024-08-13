@@ -37,20 +37,20 @@ def upload_audio(request):
         if response.status_code == 200:
             stt_response = response.json()
             transcription_text = stt_response.get('text', '')
-            server_feedback_message += f" Transcription: {transcription_text}"
+            #server_feedback_message += f" Transcription: {transcription_text}"
 
 
 
             client = Client(host='http://local-llm:11434')
             llm_response = client.chat(model='gemma:2b', messages=[{'role': 'user','content': transcription_text}])
             #llm_response = ollama.generate(model='gemma:2b', prompt='Why is the sky blue?')
-            print(llm_response['message']['content'])
+            llm_feedback = (llm_response['message']['content'])
 
 
         else:
             server_feedback_message += " Error: Failed to retrieve data from the Flask app."
 
-        return JsonResponse({'message': server_feedback_message})
+        return JsonResponse({'message': server_feedback_message, 'transcription': transcription_text, 'llmfeedback' : llm_feedback })
     else:
         return JsonResponse({'message': 'No audio file found'}, status=400)
 

@@ -5,6 +5,9 @@ const startRecordButton = document.getElementById('startRecord');
 const stopRecordButton = document.getElementById('stopRecord');
 const serverFeedback = document.getElementById('serverFeedback');
 
+const transcription = document.getElementById('transcription');
+const llmfeedback = document.getElementById('llmfeedback');
+
 startRecordButton.addEventListener('click', function() {
   navigator.mediaDevices.getUserMedia({ audio: true })
     .then(function(stream) {
@@ -34,6 +37,9 @@ startRecordButton.addEventListener('click', function() {
             console.log(data);
             // Display the returned JSON message in a <p> element
             serverFeedback.textContent = data.message;
+            transcription.textContent = data.transcription;
+            llmfeedback.textContent = data.llmfeedback;
+
           })
         .catch(function(error) {
           console.error('Error sending audio:', error);
