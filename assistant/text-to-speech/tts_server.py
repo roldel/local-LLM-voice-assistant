@@ -8,10 +8,6 @@ app = Flask(__name__)
 # Directory to save the output audio files
 OUTPUT_DIR = "/shared/output_audio"
 
-# Ensure the output directory exists
-if not os.path.exists(OUTPUT_DIR):
-    os.makedirs(OUTPUT_DIR)
-
 def text_to_speech(text):
     # Generate a timestamped filename
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
