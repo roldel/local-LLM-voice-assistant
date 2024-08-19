@@ -11,28 +11,38 @@ import ollama
 from ollama import Client
 
 
+# Main page
 def intro(request):
     return render(request,'audio_converter/intro.html')
 
 
+# Endpoint
+#
+# EXPECT POST request with audio file
+# RETURNS LLM text answer + audio answer .wav file location for client download initiation
+#
 @csrf_exempt
 def upload_audio(request):
+    # CHECK valid request
     if request.method == 'POST' and request.FILES.get('audio'):
         audio_file = request.FILES['audio']
+
+        # SAVE request audio file in /shared/input_audio/
+
         current_datetime = datetime.now().strftime("%Y%m%d_%H%M%S")
         file_name = f"audio_{current_datetime}.wav"
 
-        # upload_path = os.path.join('media', 'audio', audio_file.name)
         file_path = os.path.join(settings.MEDIA_ROOT,'input_audio', file_name)
         with open(file_path, 'wb') as file:
             for chunk in audio_file.chunks():
                 file.write(chunk)
-
         server_feedback_message = 'Audio file uploaded successfully ! File save as : '+file_name
 
+        # STT operation
         stt_url = f"http://speech-to-text:5000/transcribe/{file_name}"
         response = requests.get(stt_url)
 
+        # FEED client text request to local LLM
         if response.status_code == 200:
             stt_response = response.json()
             transcription_text = stt_response.get('text', '')
