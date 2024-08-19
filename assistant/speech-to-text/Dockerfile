@@ -7,5 +7,3 @@ RUN pip install requests
 RUN python -c "import whisper; whisper.load_model('base.en')"
 
 COPY . /app
-
-

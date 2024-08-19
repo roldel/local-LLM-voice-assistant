@@ -40,15 +40,18 @@ services:
       context: ./local-llm
     depends_on:
       - speech-to-text
-    # command: 
 
 
-#  text-to-speech:
-#
-#    build:
-#      context: ./text-to-speech
-#    volumes:
-#      - shared_volume:/shared
+
+  text-to-speech:
+
+    build:
+      context: ./text-to-speech
+    volumes:
+      - shared_volume:/shared
+    depends_on:
+      - local-llm
+    command: sh -c "python /app/tts_server.py"
 
 
 
