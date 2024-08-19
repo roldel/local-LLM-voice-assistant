@@ -4,6 +4,8 @@ let chunks = [];
 const startRecordButton = document.getElementById('startRecord');
 const stopRecordButton = document.getElementById('stopRecord');
 const serverFeedback = document.getElementById('serverFeedback');
+const audioFeedback = document.getElementById('audioFeedback');
+
 
 const transcription = document.getElementById('transcription');
 const llmfeedback = document.getElementById('llmfeedback');
@@ -39,6 +41,7 @@ startRecordButton.addEventListener('click', function() {
             serverFeedback.textContent = data.message;
             transcription.textContent = data.transcription;
             llmfeedback.textContent = data.llmfeedback;
+            audioFeedback.textContent = data.audio_filename;
 
           })
         .catch(function(error) {

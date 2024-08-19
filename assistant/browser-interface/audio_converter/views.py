@@ -29,8 +29,8 @@ def upload_audio(request):
 
         # SAVE request audio file in /shared/input_audio/
 
-        current_datetime = datetime.now().strftime("%Y%m%d_%H%M%S")
-        file_name = f"audio_{current_datetime}.wav"
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        file_name = f"audio_{timestamp}.wav"
 
         file_path = os.path.join(settings.MEDIA_ROOT,'input_audio', file_name)
         with open(file_path, 'wb') as file:
@@ -51,9 +51,33 @@ def upload_audio(request):
             llm_response = client.chat(model='gemma:2b', messages=[{'role': 'user','content': transcription_text}])
             llm_feedback = (llm_response['message']['content'])
 
+            # TTS step
+            tts_url = "http://text-to-speech:6000/tts"
+            data = {'text': llm_feedback }
+
+            try:
+                tts_feedback = requests.post(tts_url, json = data)
+
+                if tts_feedback.status_code == 200:
+                # Get the filename from the response
+                    result = tts_feedback.json()
+                    print(result)
+                    tts_filename = result.get('filename')
+                    print("the filename result from TTS is : "+ str(tts_filename))
+                    #return JsonResponse({"filename": result.get('filename')}, status=200)
+
+                else:
+                    return JsonResponse({"error": "Failed to process text-to-speech"}, status=response.status_code)
+
+            except requests.exceptions.RequestException as e:
+            # Handle any exceptions that occur during the request
+                return JsonResponse({"error": str(e)}, status=500)
+
+
+
         else:
             server_feedback_message += " Error: Failed to retrieve data from the Flask app."
 
-        return JsonResponse({'message': server_feedback_message, 'transcription': transcription_text, 'llmfeedback' : llm_feedback })
+        return JsonResponse({'message': server_feedback_message, 'transcription': transcription_text, 'llmfeedback' : llm_feedback, 'audio_filename' : tts_filename })
     else:
         return JsonResponse({'message': 'No audio file found'}, status=400)
