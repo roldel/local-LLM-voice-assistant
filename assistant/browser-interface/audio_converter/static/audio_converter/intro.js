@@ -6,7 +6,6 @@ const stopRecordButton = document.getElementById('stopRecord');
 const serverFeedback = document.getElementById('serverFeedback');
 const audioFeedback = document.getElementById('audioFeedback');
 
-
 const transcription = document.getElementById('transcription');
 const llmfeedback = document.getElementById('llmfeedback');
 
@@ -36,14 +35,28 @@ startRecordButton.addEventListener('click', function() {
           return response.json();
         })
         .then(function(data) {
-            console.log(data);
-            // Display the returned JSON message in a <p> element
-            serverFeedback.textContent = data.message;
-            transcription.textContent = data.transcription;
-            llmfeedback.textContent = data.llmfeedback;
-            audioFeedback.textContent = data.audio_filename;
+          console.log(data);
+          // Display the returned JSON message in <p> elements
+          serverFeedback.textContent = data.message;
+          transcription.textContent = data.transcription;
+          llmfeedback.textContent = data.llmfeedback;
+          audioFeedback.textContent = data.audio_filename;
 
-          })
+          // Construct the download URL
+          const audioDownloadURL = `http://localhost:8000/media/output_audio/${data.audio_filename}`;
+          
+          // Automatically download the audio file
+          const downloadLink = document.createElement('a');
+          downloadLink.href = audioDownloadURL;
+          downloadLink.download = data.audio_filename;
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+
+          // Play the audio automatically in the browser
+          const audioElement = new Audio(audioDownloadURL);
+          audioElement.play();
+        })
         .catch(function(error) {
           console.error('Error sending audio:', error);
         });

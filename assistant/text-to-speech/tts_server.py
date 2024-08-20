@@ -27,7 +27,8 @@ def tts():
 
     # Generate a timestamped filename
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_file = os.path.join(OUTPUT_DIR, f"audio_{timestamp}.wav")
+    filename = f"audio_{timestamp}.wav"
+    output_file = os.path.join(OUTPUT_DIR, filename)
 
 
     command = ["espeak", text, "-w", output_file]
@@ -36,7 +37,7 @@ def tts():
     print("File has been saved here : " + str (output_file))
 
 
-    return jsonify({"filename": output_file }), 200
+    return jsonify({"filename": filename }), 200
 
 
 
