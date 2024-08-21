@@ -25,6 +25,9 @@ def tts():
     # Directory to save the output audio files
     OUTPUT_DIR = "/shared/output_audio/"
 
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
+
     # Generate a timestamped filename
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"audio_{timestamp}.wav"
